@@ -33,7 +33,7 @@ def main_summary_modified(filepath):
 
 
 def _main_summary_dataset_from_chiba_pref(filepath):
-    SHEETNAME = "新型コロナウイルス感染者数（累積、公表日別）"
+    SHEETNAME = "新型コロナウイルス感染者数（累積、公表日別）030205以降"
     wb = load_workbook(filepath)
     ws = wb[SHEETNAME]
     i = 0
@@ -48,14 +48,14 @@ def _main_summary_dataset_from_chiba_pref(filepath):
     target_date = ws.cell(i, 2).value.date().strftime('%-m/%-d/%Y')
     patients_count = ws.cell(i, 3).value
     hospital_count = ws.cell(i, 4).value
-    hospital_waiting_count = ws.cell(i, 5).value
-    hotel_stay_count = ws.cell(i, 6).value
-    home_stay_count = ws.cell(i, 7).value
-    discharge_count = ws.cell(i, 8).value
-    finish_stay_count = ws.cell(i, 9).value
-    death_count = ws.cell(i, 10).value
-    other_count = ws.cell(i, 11).value
-    severe_injury_count = ws.cell(i, 12).value
+    home_stay_count = ws.cell(i, 5).value + ws.cell(i, 8).value
+    hospital_waiting_count = ws.cell(i, 6).value
+    hotel_stay_count = ws.cell(i, 7).value
+    discharge_count = ws.cell(i, 9).value
+    finish_stay_count = ws.cell(i, 10).value
+    death_count = ws.cell(i, 11).value
+    other_count = ws.cell(i, 12).value
+    severe_injury_count = ws.cell(i, 13).value
     return (target_date, patients_count, hospital_count, hospital_waiting_count, hotel_stay_count, home_stay_count, discharge_count, finish_stay_count, death_count, other_count, severe_injury_count)
 
 
