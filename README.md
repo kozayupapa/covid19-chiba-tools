@@ -2,7 +2,7 @@
 
 千葉県版のツール
 
-## 使い方
+## setup
 
 ```bash
 git clone https://github.com/civictechzenchiba/covid19-chiba-tools.git
@@ -11,24 +11,31 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -U pip
 pip install -r requirements.txt
-python download.py
-python convert.py | jq . > data.json
 ```
-dockerを使う場合
+## debug
 
-```bash
-git clone https://github.com/civictechzenchiba/covid19-chiba-tools.git
-cd covid19-chiba-tools
-docker build -t chiba-covid19-tools .
-docker run --rm -it chiba-covid19-tools > data.json
 ```
-## ファイル
+% python download_pubdata.py                                                                                                          (git)-[feature-main-summary-format-changed]
+0211 0210
+We failed to reach a server.
+Reason:  Not Found https://www.pref.chiba.lg.jp/shippei/press/2019/documents/0211chiba_corona_data.xlsx
+download success:https://www.pref.chiba.lg.jp/shippei/press/2019/documents/0210chiba_corona_data.xlsx
 
-download.pyはdataディレクトリに[Google Drive](https://drive.google.com/drive/folders/1SxZqdYCx5vN2JUPycePzfbnW7L7VTiiS)から以下のxlsxファイルをダウンロードします。
+% python convert_pubdata.py | jq . > data/DataPub.json
 
-- 検査実施サマリ.xlsx
-- 検査実績（データセット）千葉県衛生研究所2019-nCoVラインリスト<日付>.xlsx
-- 検査実施日別状況.xlsx
-- 【<日付>】千葉県_感染者発生状況.xlsx
-- 帰国者接触者センター相談件数-RAW.xlsx
-- コールセンター相談件数-RAW.xlsx
+```
+
+## deploy to aws lambda
+
+### setup
+* AWS アカウントを作成し、そのなかに結果出力用のS3bucketと、covid19chiba-deployというlambda functionを作成しておく
+* 現在はweb front側から下記のS3bucketにあるデータをDownloadする設定になっている
+  - https://covid19chiba.s3-ap-northeast-1.amazonaws.com/DataPub.json
+* 上記は　現状 kozayupapaの個人アカウント上で構築している　移行する場合はWebFront側の参照パスもあわせて更新する必要あるので注意
+
+
+* Test
+  - `./deploy-aws-lambda.sh covid19chiba-tool ap-northeast-1 Test_1 covid19chiba-deploy`
+
+* Prod
+  - `% ./deploy-aws-lambda.sh covid19chiba-tool ap-northeast-1 Prod covid19chiba-deploy  `
